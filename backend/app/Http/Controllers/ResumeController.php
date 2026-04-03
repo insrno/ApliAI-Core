@@ -22,7 +22,7 @@ class ResumeController extends Controller
     {
         $request->validate([
             'resume' => 'required|mimes:pdf|max:2048',
-            // 'user_id' => 'required|exists:users,id'
+            'user_id' => 'required|exists:users,id',
         ]);
 
         if (! $request->hasFile('resume')) {
@@ -34,7 +34,7 @@ class ResumeController extends Controller
         $filePath = $file->storeAs('resumes', $fileName, 'public');
 
         $resume = Resume::create([
-            'user_id' => 1,
+            'user_id' => (int) $request->input('user_id'),
             'file_name' => $fileName,
             'file_path' => $filePath,
         ]);
