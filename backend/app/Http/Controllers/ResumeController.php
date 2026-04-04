@@ -45,6 +45,7 @@ class ResumeController extends Controller
                 'user_id' => 1, 
                 'file_name' => $fileName,
                 'file_path' => $filePath,
+                'extracted_text' => $extractedText,
             ]);
 
             return response()->json([

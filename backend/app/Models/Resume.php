@@ -10,5 +10,6 @@ class Resume extends Model
         'user_id',
         'file_name',
         'file_path',
+        'extracted_text',
     ];
 }
