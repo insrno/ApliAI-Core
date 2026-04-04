@@ -36,10 +36,24 @@ COPY . .
 # Run post-install scripts now that all files are present
 RUN composer run-script post-autoload-dump
 
+# Create required directories
+RUN mkdir -p storage/app/public/resumes \
+    && mkdir -p storage/framework/cache \
+    && mkdir -p storage/framework/sessions \
+    && mkdir -p storage/framework/views \
+    && mkdir -p storage/logs \
+    && mkdir -p bootstrap/cache
+
 # Set permissions for storage and cache
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
     && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
+# Create storage symlink
+RUN php artisan storage:link 2>/dev/null || true
+
 EXPOSE 8000
 
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
+# Clear config cache, run migrations, then start server
+CMD php artisan config:clear \
+    && php artisan migrate --force \
+    && php artisan serve --host=0.0.0.0 --port=8000
