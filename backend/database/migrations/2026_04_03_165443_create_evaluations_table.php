@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('evaluations', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('resume_id');
+            $table->unsignedBigInteger('job_description_id');
+            $table->integer('score')->default(0);
+            $table->longText('feedback')->nullable();
+            $table->json('strengths')->nullable();
+            $table->json('weaknesses')->nullable();
             $table->timestamps();
         });
     }
