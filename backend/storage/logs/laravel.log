@@ -1,0 +1,647 @@
+[2026-04-03 18:33:58] local.ERROR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'user_id' in 'field list' (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: apliai_db, SQL: insert into `resumes` (`user_id`, `file_name`, `file_path`, `updated_at`, `created_at`) values (1, 1775241236_Christian_Serrano_Resume_V7.pdf, resumes/1775241236_Christian_Serrano_Resume_V7.pdf, 2026-04-03 18:33:57, 2026-04-03 18:33:57)) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S22): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'user_id' in 'field list' (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: apliai_db, SQL: insert into `resumes` (`user_id`, `file_name`, `file_path`, `updated_at`, `created_at`) values (1, 1775241236_Christian_Serrano_Resume_V7.pdf, resumes/1775241236_Christian_Serrano_Resume_V7.pdf, 2026-04-03 18:33:57, 2026-04-03 18:33:57)) at C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php:838)
+[stacktrace]
+#0 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(794): Illuminate/Database/Connection->runQueryCallback('insert into `re...', Array, Object(Closure))
+#1 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/MySqlConnection.php(42): Illuminate/Database/Connection->run('insert into `re...', Array, Object(Closure))
+#2 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Processors/MySqlProcessor.php(35): Illuminate/Database/MySqlConnection->insert('insert into `re...', Array, 'id')
+#3 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4170): Illuminate/Database/Query/Processors/MySqlProcessor->processInsertGetId(Object(Illuminate/Database/Query/Builder), 'insert into `re...', Array, 'id')
+#4 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(2237): Illuminate/Database/Query/Builder->insertGetId(Array, 'id')
+#5 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1436): Illuminate/Database/Eloquent/Builder->__call('insertGetId', Array)
+#6 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1401): Illuminate/Database/Eloquent/Model->insertAndSetId(Object(Illuminate/Database/Eloquent/Builder), Array)
+#7 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1240): Illuminate/Database/Eloquent/Model->performInsert(Object(Illuminate/Database/Eloquent/Builder))
+#8 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(1219): Illuminate/Database/Eloquent/Model->save()
+#9 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Support/helpers.php(393): Illuminate/Database/Eloquent/Builder->Illuminate/Database/Eloquent/{closure}(Object(App/Models/Resume))
+#10 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(1218): tap(Object(App/Models/Resume), Object(Closure))
+#11 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php(23): Illuminate/Database/Eloquent/Builder->create(Array)
+#12 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2540): Illuminate/Database/Eloquent/Model->forwardCallTo(Object(Illuminate/Database/Eloquent/Builder), 'create', Array)
+#13 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2556): Illuminate/Database/Eloquent/Model->__call('create', Array)
+#14 C:/Users/chris/Documents/GitHub/ApliAI/backend/app/Http/Controllers/ResumeController.php(36): Illuminate/Database/Eloquent/Model::__callStatic('create', Array)
+#15 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Http/Controllers/ResumeController->store(Object(Illuminate/Http/Request))
+#16 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(265): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Http/Controllers/ResumeController), 'store')
+#17 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(211): Illuminate/Routing/Route->runController()
+#18 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#19 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#20 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#21 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Routing/Middleware/SubstituteBindings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#22 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#23 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#24 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#25 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#26 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#27 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#28 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#29 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#30 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#31 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#32 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#33 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#34 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#35 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#36 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#37 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#38 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#39 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(74): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#40 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#41 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#42 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#43 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#44 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks->handle(Object(Illuminate/Http/Request), Object(Closure))
+#45 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(26): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#46 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePathEncoding->handle(Object(Illuminate/Http/Request), Object(Closure))
+#47 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#48 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#49 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#50 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1220): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#51 C:/Users/chris/Documents/GitHub/ApliAI/backend/public/index.php(20): Illuminate/Foundation/Application->handleRequest(Object(Illuminate/Http/Request))
+#52 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Users//chris//...')
+#53 {main}
+
+[previous exception] [object] (PDOException(code: 42S22): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'user_id' in 'field list' at C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/MySqlConnection.php:47)
+[stacktrace]
+#0 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/MySqlConnection.php(47): PDO->prepare('insert into `re...')
+#1 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(827): Illuminate/Database/MySqlConnection->Illuminate/Database/{closure}('insert into `re...', Array)
+#2 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(794): Illuminate/Database/Connection->runQueryCallback('insert into `re...', Array, Object(Closure))
+#3 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/MySqlConnection.php(42): Illuminate/Database/Connection->run('insert into `re...', Array, Object(Closure))
+#4 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Processors/MySqlProcessor.php(35): Illuminate/Database/MySqlConnection->insert('insert into `re...', Array, 'id')
+#5 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4170): Illuminate/Database/Query/Processors/MySqlProcessor->processInsertGetId(Object(Illuminate/Database/Query/Builder), 'insert into `re...', Array, 'id')
+#6 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(2237): Illuminate/Database/Query/Builder->insertGetId(Array, 'id')
+#7 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1436): Illuminate/Database/Eloquent/Builder->__call('insertGetId', Array)
+#8 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1401): Illuminate/Database/Eloquent/Model->insertAndSetId(Object(Illuminate/Database/Eloquent/Builder), Array)
+#9 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1240): Illuminate/Database/Eloquent/Model->performInsert(Object(Illuminate/Database/Eloquent/Builder))
+#10 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(1219): Illuminate/Database/Eloquent/Model->save()
+#11 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Support/helpers.php(393): Illuminate/Database/Eloquent/Builder->Illuminate/Database/Eloquent/{closure}(Object(App/Models/Resume))
+#12 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(1218): tap(Object(App/Models/Resume), Object(Closure))
+#13 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php(23): Illuminate/Database/Eloquent/Builder->create(Array)
+#14 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2540): Illuminate/Database/Eloquent/Model->forwardCallTo(Object(Illuminate/Database/Eloquent/Builder), 'create', Array)
+#15 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2556): Illuminate/Database/Eloquent/Model->__call('create', Array)
+#16 C:/Users/chris/Documents/GitHub/ApliAI/backend/app/Http/Controllers/ResumeController.php(36): Illuminate/Database/Eloquent/Model::__callStatic('create', Array)
+#17 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Http/Controllers/ResumeController->store(Object(Illuminate/Http/Request))
+#18 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(265): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Http/Controllers/ResumeController), 'store')
+#19 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(211): Illuminate/Routing/Route->runController()
+#20 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#21 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#22 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#23 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Routing/Middleware/SubstituteBindings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#24 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#25 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#26 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#27 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#28 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#29 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#30 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#31 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#32 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#33 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#34 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#35 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#36 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#37 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#38 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#39 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#40 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#41 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(74): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#42 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#43 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#44 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#45 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#46 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks->handle(Object(Illuminate/Http/Request), Object(Closure))
+#47 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(26): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#48 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePathEncoding->handle(Object(Illuminate/Http/Request), Object(Closure))
+#49 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#50 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#51 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#52 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1220): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#53 C:/Users/chris/Documents/GitHub/ApliAI/backend/public/index.php(20): Illuminate/Foundation/Application->handleRequest(Object(Illuminate/Http/Request))
+#54 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Users//chris//...')
+#55 {main}
+"} 
+[2026-04-03 18:36:57] local.ERROR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'user_id' in 'field list' (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: apliai_db, SQL: insert into `resumes` (`user_id`, `file_name`, `file_path`, `updated_at`, `created_at`) values (1, 1775241417_Christian_Serrano_Resume_V7.pdf, resumes/1775241417_Christian_Serrano_Resume_V7.pdf, 2026-04-03 18:36:57, 2026-04-03 18:36:57)) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S22): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'user_id' in 'field list' (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: apliai_db, SQL: insert into `resumes` (`user_id`, `file_name`, `file_path`, `updated_at`, `created_at`) values (1, 1775241417_Christian_Serrano_Resume_V7.pdf, resumes/1775241417_Christian_Serrano_Resume_V7.pdf, 2026-04-03 18:36:57, 2026-04-03 18:36:57)) at C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php:838)
+[stacktrace]
+#0 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(794): Illuminate/Database/Connection->runQueryCallback('insert into `re...', Array, Object(Closure))
+#1 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/MySqlConnection.php(42): Illuminate/Database/Connection->run('insert into `re...', Array, Object(Closure))
+#2 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Processors/MySqlProcessor.php(35): Illuminate/Database/MySqlConnection->insert('insert into `re...', Array, 'id')
+#3 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4170): Illuminate/Database/Query/Processors/MySqlProcessor->processInsertGetId(Object(Illuminate/Database/Query/Builder), 'insert into `re...', Array, 'id')
+#4 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(2237): Illuminate/Database/Query/Builder->insertGetId(Array, 'id')
+#5 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1436): Illuminate/Database/Eloquent/Builder->__call('insertGetId', Array)
+#6 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1401): Illuminate/Database/Eloquent/Model->insertAndSetId(Object(Illuminate/Database/Eloquent/Builder), Array)
+#7 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1240): Illuminate/Database/Eloquent/Model->performInsert(Object(Illuminate/Database/Eloquent/Builder))
+#8 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(1219): Illuminate/Database/Eloquent/Model->save()
+#9 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Support/helpers.php(393): Illuminate/Database/Eloquent/Builder->Illuminate/Database/Eloquent/{closure}(Object(App/Models/Resume))
+#10 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(1218): tap(Object(App/Models/Resume), Object(Closure))
+#11 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php(23): Illuminate/Database/Eloquent/Builder->create(Array)
+#12 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2540): Illuminate/Database/Eloquent/Model->forwardCallTo(Object(Illuminate/Database/Eloquent/Builder), 'create', Array)
+#13 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2556): Illuminate/Database/Eloquent/Model->__call('create', Array)
+#14 C:/Users/chris/Documents/GitHub/ApliAI/backend/app/Http/Controllers/ResumeController.php(36): Illuminate/Database/Eloquent/Model::__callStatic('create', Array)
+#15 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Http/Controllers/ResumeController->store(Object(Illuminate/Http/Request))
+#16 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(265): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Http/Controllers/ResumeController), 'store')
+#17 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(211): Illuminate/Routing/Route->runController()
+#18 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#19 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#20 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#21 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Routing/Middleware/SubstituteBindings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#22 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#23 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#24 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#25 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#26 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#27 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#28 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#29 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#30 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#31 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#32 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#33 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#34 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#35 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#36 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#37 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#38 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#39 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(74): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#40 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#41 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#42 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#43 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#44 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks->handle(Object(Illuminate/Http/Request), Object(Closure))
+#45 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(26): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#46 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePathEncoding->handle(Object(Illuminate/Http/Request), Object(Closure))
+#47 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#48 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#49 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#50 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1220): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#51 C:/Users/chris/Documents/GitHub/ApliAI/backend/public/index.php(20): Illuminate/Foundation/Application->handleRequest(Object(Illuminate/Http/Request))
+#52 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Users//chris//...')
+#53 {main}
+
+[previous exception] [object] (PDOException(code: 42S22): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'user_id' in 'field list' at C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/MySqlConnection.php:47)
+[stacktrace]
+#0 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/MySqlConnection.php(47): PDO->prepare('insert into `re...')
+#1 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(827): Illuminate/Database/MySqlConnection->Illuminate/Database/{closure}('insert into `re...', Array)
+#2 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(794): Illuminate/Database/Connection->runQueryCallback('insert into `re...', Array, Object(Closure))
+#3 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/MySqlConnection.php(42): Illuminate/Database/Connection->run('insert into `re...', Array, Object(Closure))
+#4 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Processors/MySqlProcessor.php(35): Illuminate/Database/MySqlConnection->insert('insert into `re...', Array, 'id')
+#5 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4170): Illuminate/Database/Query/Processors/MySqlProcessor->processInsertGetId(Object(Illuminate/Database/Query/Builder), 'insert into `re...', Array, 'id')
+#6 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(2237): Illuminate/Database/Query/Builder->insertGetId(Array, 'id')
+#7 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1436): Illuminate/Database/Eloquent/Builder->__call('insertGetId', Array)
+#8 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1401): Illuminate/Database/Eloquent/Model->insertAndSetId(Object(Illuminate/Database/Eloquent/Builder), Array)
+#9 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1240): Illuminate/Database/Eloquent/Model->performInsert(Object(Illuminate/Database/Eloquent/Builder))
+#10 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(1219): Illuminate/Database/Eloquent/Model->save()
+#11 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Support/helpers.php(393): Illuminate/Database/Eloquent/Builder->Illuminate/Database/Eloquent/{closure}(Object(App/Models/Resume))
+#12 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(1218): tap(Object(App/Models/Resume), Object(Closure))
+#13 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php(23): Illuminate/Database/Eloquent/Builder->create(Array)
+#14 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2540): Illuminate/Database/Eloquent/Model->forwardCallTo(Object(Illuminate/Database/Eloquent/Builder), 'create', Array)
+#15 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2556): Illuminate/Database/Eloquent/Model->__call('create', Array)
+#16 C:/Users/chris/Documents/GitHub/ApliAI/backend/app/Http/Controllers/ResumeController.php(36): Illuminate/Database/Eloquent/Model::__callStatic('create', Array)
+#17 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Http/Controllers/ResumeController->store(Object(Illuminate/Http/Request))
+#18 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(265): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Http/Controllers/ResumeController), 'store')
+#19 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(211): Illuminate/Routing/Route->runController()
+#20 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#21 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#22 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#23 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Routing/Middleware/SubstituteBindings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#24 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#25 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#26 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#27 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#28 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#29 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#30 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#31 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#32 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#33 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#34 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#35 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#36 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#37 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#38 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#39 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#40 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#41 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(74): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#42 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#43 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#44 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#45 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#46 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks->handle(Object(Illuminate/Http/Request), Object(Closure))
+#47 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(26): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#48 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePathEncoding->handle(Object(Illuminate/Http/Request), Object(Closure))
+#49 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#50 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#51 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#52 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1220): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#53 C:/Users/chris/Documents/GitHub/ApliAI/backend/public/index.php(20): Illuminate/Foundation/Application->handleRequest(Object(Illuminate/Http/Request))
+#54 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Users//chris//...')
+#55 {main}
+"} 
+[2026-04-04 05:18:51] local.ERROR: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`apliai_db`.`resumes`, CONSTRAINT `resumes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE) (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: apliai_db, SQL: insert into `resumes` (`user_id`, `file_name`, `file_path`, `updated_at`, `created_at`) values (1, 1775279931_Christian_Serrano_Resume_V7.pdf, resumes/1775279931_Christian_Serrano_Resume_V7.pdf, 2026-04-04 05:18:51, 2026-04-04 05:18:51)) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 23000): SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`apliai_db`.`resumes`, CONSTRAINT `resumes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE) (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: apliai_db, SQL: insert into `resumes` (`user_id`, `file_name`, `file_path`, `updated_at`, `created_at`) values (1, 1775279931_Christian_Serrano_Resume_V7.pdf, resumes/1775279931_Christian_Serrano_Resume_V7.pdf, 2026-04-04 05:18:51, 2026-04-04 05:18:51)) at C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php:838)
+[stacktrace]
+#0 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(794): Illuminate/Database/Connection->runQueryCallback('insert into `re...', Array, Object(Closure))
+#1 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/MySqlConnection.php(42): Illuminate/Database/Connection->run('insert into `re...', Array, Object(Closure))
+#2 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Processors/MySqlProcessor.php(35): Illuminate/Database/MySqlConnection->insert('insert into `re...', Array, 'id')
+#3 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4170): Illuminate/Database/Query/Processors/MySqlProcessor->processInsertGetId(Object(Illuminate/Database/Query/Builder), 'insert into `re...', Array, 'id')
+#4 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(2237): Illuminate/Database/Query/Builder->insertGetId(Array, 'id')
+#5 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1436): Illuminate/Database/Eloquent/Builder->__call('insertGetId', Array)
+#6 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1401): Illuminate/Database/Eloquent/Model->insertAndSetId(Object(Illuminate/Database/Eloquent/Builder), Array)
+#7 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1240): Illuminate/Database/Eloquent/Model->performInsert(Object(Illuminate/Database/Eloquent/Builder))
+#8 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(1219): Illuminate/Database/Eloquent/Model->save()
+#9 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Support/helpers.php(393): Illuminate/Database/Eloquent/Builder->Illuminate/Database/Eloquent/{closure}(Object(App/Models/Resume))
+#10 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(1218): tap(Object(App/Models/Resume), Object(Closure))
+#11 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php(23): Illuminate/Database/Eloquent/Builder->create(Array)
+#12 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2540): Illuminate/Database/Eloquent/Model->forwardCallTo(Object(Illuminate/Database/Eloquent/Builder), 'create', Array)
+#13 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2556): Illuminate/Database/Eloquent/Model->__call('create', Array)
+#14 C:/Users/chris/Documents/GitHub/ApliAI/backend/app/Http/Controllers/ResumeController.php(44): Illuminate/Database/Eloquent/Model::__callStatic('create', Array)
+#15 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Http/Controllers/ResumeController->store(Object(Illuminate/Http/Request))
+#16 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(265): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Http/Controllers/ResumeController), 'store')
+#17 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(211): Illuminate/Routing/Route->runController()
+#18 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#19 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#20 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#21 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Routing/Middleware/SubstituteBindings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#22 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#23 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#24 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#25 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#26 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#27 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#28 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#29 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#30 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#31 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#32 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#33 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#34 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#35 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#36 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#37 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#38 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#39 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(74): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#40 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#41 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#42 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#43 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#44 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks->handle(Object(Illuminate/Http/Request), Object(Closure))
+#45 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(26): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#46 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePathEncoding->handle(Object(Illuminate/Http/Request), Object(Closure))
+#47 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#48 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#49 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#50 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1220): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#51 C:/Users/chris/Documents/GitHub/ApliAI/backend/public/index.php(20): Illuminate/Foundation/Application->handleRequest(Object(Illuminate/Http/Request))
+#52 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Users//chris//...')
+#53 {main}
+
+[previous exception] [object] (PDOException(code: 23000): SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`apliai_db`.`resumes`, CONSTRAINT `resumes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE) at C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/MySqlConnection.php:53)
+[stacktrace]
+#0 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/MySqlConnection.php(53): PDOStatement->execute()
+#1 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(827): Illuminate/Database/MySqlConnection->Illuminate/Database/{closure}('insert into `re...', Array)
+#2 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Connection.php(794): Illuminate/Database/Connection->runQueryCallback('insert into `re...', Array, Object(Closure))
+#3 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/MySqlConnection.php(42): Illuminate/Database/Connection->run('insert into `re...', Array, Object(Closure))
+#4 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Processors/MySqlProcessor.php(35): Illuminate/Database/MySqlConnection->insert('insert into `re...', Array, 'id')
+#5 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(4170): Illuminate/Database/Query/Processors/MySqlProcessor->processInsertGetId(Object(Illuminate/Database/Query/Builder), 'insert into `re...', Array, 'id')
+#6 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(2237): Illuminate/Database/Query/Builder->insertGetId(Array, 'id')
+#7 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1436): Illuminate/Database/Eloquent/Builder->__call('insertGetId', Array)
+#8 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1401): Illuminate/Database/Eloquent/Model->insertAndSetId(Object(Illuminate/Database/Eloquent/Builder), Array)
+#9 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1240): Illuminate/Database/Eloquent/Model->performInsert(Object(Illuminate/Database/Eloquent/Builder))
+#10 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(1219): Illuminate/Database/Eloquent/Model->save()
+#11 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Support/helpers.php(393): Illuminate/Database/Eloquent/Builder->Illuminate/Database/Eloquent/{closure}(Object(App/Models/Resume))
+#12 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(1218): tap(Object(App/Models/Resume), Object(Closure))
+#13 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php(23): Illuminate/Database/Eloquent/Builder->create(Array)
+#14 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2540): Illuminate/Database/Eloquent/Model->forwardCallTo(Object(Illuminate/Database/Eloquent/Builder), 'create', Array)
+#15 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2556): Illuminate/Database/Eloquent/Model->__call('create', Array)
+#16 C:/Users/chris/Documents/GitHub/ApliAI/backend/app/Http/Controllers/ResumeController.php(44): Illuminate/Database/Eloquent/Model::__callStatic('create', Array)
+#17 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App/Http/Controllers/ResumeController->store(Object(Illuminate/Http/Request))
+#18 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(265): Illuminate/Routing/ControllerDispatcher->dispatch(Object(Illuminate/Routing/Route), Object(App/Http/Controllers/ResumeController), 'store')
+#19 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Route.php(211): Illuminate/Routing/Route->runController()
+#20 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(822): Illuminate/Routing/Route->run()
+#21 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Routing/Router->Illuminate/Routing/{closure}(Object(Illuminate/Http/Request))
+#22 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#23 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Routing/Middleware/SubstituteBindings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#24 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#25 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#26 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate/Routing/Router->runRouteWithinStack(Object(Illuminate/Routing/Route), Object(Illuminate/Http/Request))
+#27 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate/Routing/Router->runRoute(Object(Illuminate/Http/Request), Object(Illuminate/Routing/Route))
+#28 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate/Routing/Router->dispatchToRoute(Object(Illuminate/Http/Request))
+#29 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate/Routing/Router->dispatch(Object(Illuminate/Http/Request))
+#30 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate/Foundation/Http/Kernel->Illuminate/Foundation/Http/{closure}(Object(Illuminate/Http/Request))
+#31 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#32 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#33 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull->handle(Object(Illuminate/Http/Request), Object(Closure))
+#34 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#35 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate/Foundation/Http/Middleware/TransformsRequest->handle(Object(Illuminate/Http/Request), Object(Closure))
+#36 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/TrimStrings->handle(Object(Illuminate/Http/Request), Object(Closure))
+#37 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#38 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePostSize->handle(Object(Illuminate/Http/Request), Object(Closure))
+#39 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#40 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance->handle(Object(Illuminate/Http/Request), Object(Closure))
+#41 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(74): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#42 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/HandleCors->handle(Object(Illuminate/Http/Request), Object(Closure))
+#43 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#44 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/TrustProxies->handle(Object(Illuminate/Http/Request), Object(Closure))
+#45 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#46 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks->handle(Object(Illuminate/Http/Request), Object(Closure))
+#47 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(26): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#48 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate/Http/Middleware/ValidatePathEncoding->handle(Object(Illuminate/Http/Request), Object(Closure))
+#49 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate/Pipeline/Pipeline->Illuminate/Pipeline/{closure}(Object(Illuminate/Http/Request))
+#50 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate/Pipeline/Pipeline->then(Object(Closure))
+#51 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate/Foundation/Http/Kernel->sendRequestThroughRouter(Object(Illuminate/Http/Request))
+#52 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1220): Illuminate/Foundation/Http/Kernel->handle(Object(Illuminate/Http/Request))
+#53 C:/Users/chris/Documents/GitHub/ApliAI/backend/public/index.php(20): Illuminate/Foundation/Application->handleRequest(Object(Illuminate/Http/Request))
+#54 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://Users//chris//...')
+#55 {main}
+"} 
+[2026-04-04 05:39:51] local.ERROR: Gemini API Error {"response":"{
+  \"error\": {
+    \"code\": 429,
+    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\nPlease retry in 8.906598773s.\",
+    \"status\": \"RESOURCE_EXHAUSTED\",
+    \"details\": [
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.Help\",
+        \"links\": [
+          {
+            \"description\": \"Learn more about Gemini API quotas\",
+            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"
+          }
+        ]
+      },
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.QuotaFailure\",
+        \"violations\": [
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",
+            \"quotaId\": \"GenerateContentInputTokensPerModelPerMinute-FreeTier\",
+            \"quotaDimensions\": {
+              \"location\": \"global\",
+              \"model\": \"gemini-2.0-flash\"
+            }
+          },
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",
+            \"quotaId\": \"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",
+            \"quotaDimensions\": {
+              \"location\": \"global\",
+              \"model\": \"gemini-2.0-flash\"
+            }
+          },
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",
+            \"quotaId\": \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",
+            \"quotaDimensions\": {
+              \"location\": \"global\",
+              \"model\": \"gemini-2.0-flash\"
+            }
+          }
+        ]
+      },
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.RetryInfo\",
+        \"retryDelay\": \"8s\"
+      }
+    ]
+  }
+}
+"} 
+[2026-04-04 05:39:58] local.ERROR: Gemini API Error {"response":"{
+  \"error\": {
+    \"code\": 429,
+    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\\nPlease retry in 1.203422383s.\",
+    \"status\": \"RESOURCE_EXHAUSTED\",
+    \"details\": [
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.Help\",
+        \"links\": [
+          {
+            \"description\": \"Learn more about Gemini API quotas\",
+            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"
+          }
+        ]
+      },
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.QuotaFailure\",
+        \"violations\": [
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",
+            \"quotaId\": \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",
+            \"quotaDimensions\": {
+              \"location\": \"global\",
+              \"model\": \"gemini-2.0-flash\"
+            }
+          },
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",
+            \"quotaId\": \"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",
+            \"quotaDimensions\": {
+              \"model\": \"gemini-2.0-flash\",
+              \"location\": \"global\"
+            }
+          },
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",
+            \"quotaId\": \"GenerateContentInputTokensPerModelPerMinute-FreeTier\",
+            \"quotaDimensions\": {
+              \"model\": \"gemini-2.0-flash\",
+              \"location\": \"global\"
+            }
+          }
+        ]
+      },
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.RetryInfo\",
+        \"retryDelay\": \"1s\"
+      }
+    ]
+  }
+}
+"} 
+[2026-04-04 05:42:59] local.ERROR: Gemini API Error {"response":"{
+  \"error\": {
+    \"code\": 429,
+    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\\nPlease retry in 948.413593ms.\",
+    \"status\": \"RESOURCE_EXHAUSTED\",
+    \"details\": [
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.Help\",
+        \"links\": [
+          {
+            \"description\": \"Learn more about Gemini API quotas\",
+            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"
+          }
+        ]
+      },
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.QuotaFailure\",
+        \"violations\": [
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",
+            \"quotaId\": \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",
+            \"quotaDimensions\": {
+              \"model\": \"gemini-2.0-flash\",
+              \"location\": \"global\"
+            }
+          },
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",
+            \"quotaId\": \"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",
+            \"quotaDimensions\": {
+              \"model\": \"gemini-2.0-flash\",
+              \"location\": \"global\"
+            }
+          },
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",
+            \"quotaId\": \"GenerateContentInputTokensPerModelPerMinute-FreeTier\",
+            \"quotaDimensions\": {
+              \"location\": \"global\",
+              \"model\": \"gemini-2.0-flash\"
+            }
+          }
+        ]
+      },
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.RetryInfo\",
+        \"retryDelay\": \"0s\"
+      }
+    ]
+  }
+}
+"} 
+[2026-04-04 05:50:54] local.ERROR: Gemini API Error {"response":"{
+  \"error\": {
+    \"code\": 429,
+    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\nPlease retry in 5.404742727s.\",
+    \"status\": \"RESOURCE_EXHAUSTED\",
+    \"details\": [
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.Help\",
+        \"links\": [
+          {
+            \"description\": \"Learn more about Gemini API quotas\",
+            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"
+          }
+        ]
+      },
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.QuotaFailure\",
+        \"violations\": [
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",
+            \"quotaId\": \"GenerateContentInputTokensPerModelPerMinute-FreeTier\",
+            \"quotaDimensions\": {
+              \"location\": \"global\",
+              \"model\": \"gemini-2.0-flash\"
+            }
+          },
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",
+            \"quotaId\": \"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",
+            \"quotaDimensions\": {
+              \"location\": \"global\",
+              \"model\": \"gemini-2.0-flash\"
+            }
+          },
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",
+            \"quotaId\": \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",
+            \"quotaDimensions\": {
+              \"location\": \"global\",
+              \"model\": \"gemini-2.0-flash\"
+            }
+          }
+        ]
+      },
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.RetryInfo\",
+        \"retryDelay\": \"5s\"
+      }
+    ]
+  }
+}
+"} 
+[2026-04-04 05:53:38] local.ERROR: Gemini API Error {"response":"{
+  \"error\": {
+    \"code\": 429,
+    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\\nPlease retry in 21.444975987s.\",
+    \"status\": \"RESOURCE_EXHAUSTED\",
+    \"details\": [
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.Help\",
+        \"links\": [
+          {
+            \"description\": \"Learn more about Gemini API quotas\",
+            \"url\": \"https://ai.google.dev/gemini-api/docs/rate-limits\"
+          }
+        ]
+      },
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.QuotaFailure\",
+        \"violations\": [
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",
+            \"quotaId\": \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",
+            \"quotaDimensions\": {
+              \"model\": \"gemini-2.0-flash\",
+              \"location\": \"global\"
+            }
+          },
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_requests\",
+            \"quotaId\": \"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\",
+            \"quotaDimensions\": {
+              \"model\": \"gemini-2.0-flash\",
+              \"location\": \"global\"
+            }
+          },
+          {
+            \"quotaMetric\": \"generativelanguage.googleapis.com/generate_content_free_tier_input_token_count\",
+            \"quotaId\": \"GenerateContentInputTokensPerModelPerMinute-FreeTier\",
+            \"quotaDimensions\": {
+              \"model\": \"gemini-2.0-flash\",
+              \"location\": \"global\"
+            }
+          }
+        ]
+      },
+      {
+        \"@type\": \"type.googleapis.com/google.rpc.RetryInfo\",
+        \"retryDelay\": \"21s\"
+      }
+    ]
+  }
+}
+"} 
+[2026-04-04 05:57:07] local.ERROR: PHP Parse error: Syntax error, unexpected '=' on line 1 {"exception":"[object] (Psy\\Exception\\ParseErrorException(code: 0): PHP Parse error: Syntax error, unexpected '=' on line 1 at C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/psy/psysh/src/Exception/ParseErrorException.php:44)
+[stacktrace]
+#0 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/psy/psysh/src/CodeCleaner.php(657): Psy/Exception/ParseErrorException::fromParseError(Object(PhpParser/Error))
+#1 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/psy/psysh/src/CodeCleaner.php(273): Psy/CodeCleaner->parse('<?php  = //Illum...', false)
+#2 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/psy/psysh/src/Shell.php(1358): Psy/CodeCleaner->clean(Array, false)
+#3 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/psy/psysh/src/Shell.php(1465): Psy/Shell->appendCode(' = //Illuminate//...', true, false)
+#4 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/psy/psysh/src/Shell.php(2173): Psy/Shell->setCode(' = //Illuminate//...', true)
+#5 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/tinker/src/Console/TinkerCommand.php(77): Psy/Shell->execute(' = //Illuminate//...')
+#6 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Laravel/Tinker/Console/TinkerCommand->handle()
+#7 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Container/Util.php(43): Illuminate/Container/BoundMethod::Illuminate/Container/{closure}()
+#8 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(96): Illuminate/Container/Util::unwrapIfClosure(Object(Closure))
+#9 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate/Container/BoundMethod::callBoundMethod(Object(Illuminate/Foundation/Application), Array, Object(Closure))
+#10 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Container/Container.php(799): Illuminate/Container/BoundMethod::call(Object(Illuminate/Foundation/Application), Array, Array, NULL)
+#11 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Console/Command.php(211): Illuminate/Container/Container->call(Array)
+#12 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/symfony/console/Command/Command.php(341): Illuminate/Console/Command->execute(Object(Symfony/Component/Console/Input/ArgvInput), Object(Illuminate/Console/OutputStyle))
+#13 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony/Component/Console/Command/Command->run(Object(Symfony/Component/Console/Input/ArgvInput), Object(Illuminate/Console/OutputStyle))
+#14 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/symfony/console/Application.php(1117): Illuminate/Console/Command->run(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#15 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/symfony/console/Application.php(356): Symfony/Component/Console/Application->doRunCommand(Object(Laravel/Tinker/Console/TinkerCommand), Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#16 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/symfony/console/Application.php(195): Symfony/Component/Console/Application->doRun(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#17 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(198): Symfony/Component/Console/Application->run(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#18 C:/Users/chris/Documents/GitHub/ApliAI/backend/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1235): Illuminate/Foundation/Console/Kernel->handle(Object(Symfony/Component/Console/Input/ArgvInput), Object(Symfony/Component/Console/Output/ConsoleOutput))
+#19 C:/Users/chris/Documents/GitHub/ApliAI/backend/artisan(16): Illuminate/Foundation/Application->handleCommand(Object(Symfony/Component/Console/Input/ArgvInput))
+#20 {main}
+"} 
+[2026-04-04 06:05:28] local.WARNING: Gemini API rate limited (attempt 1/3)  
+[2026-04-04 06:05:31] local.WARNING: Gemini API rate limited (attempt 2/3)  
+[2026-04-04 06:05:36] local.WARNING: Gemini API rate limited (attempt 3/3)  
+[2026-04-04 06:10:08] local.WARNING: Gemini API rate limited (attempt 1/3)  
+[2026-04-04 06:10:10] local.WARNING: Gemini API rate limited (attempt 2/3)  
+[2026-04-04 06:10:14] local.WARNING: Gemini API rate limited (attempt 3/3)  
+[2026-04-04 06:26:23] local.ERROR: OpenAI API error {"status":401,"body":"{
+    \"error\": {
+        \"message\": \"Incorrect API key provided: wAtTXrFF************************************************************************************************************************************************lksA. You can find your API key at https://platform.openai.com/account/api-keys.\",
+        \"type\": \"invalid_request_error\",
+        \"param\": null,
+        \"code\": \"invalid_api_key\"
+    }
+}
+"} 
