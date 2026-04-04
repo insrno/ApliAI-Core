@@ -14,6 +14,11 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Node.js 20 (for Vite frontend build)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
@@ -27,11 +32,18 @@ WORKDIR /var/www
 # Copy composer files first (for better Docker layer caching)
 COPY composer.json composer.lock ./
 
-# Install dependencies (no dev packages for production)
+# Install PHP dependencies (no dev packages for production)
 RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+# Copy package files and install Node dependencies
+COPY package.json package-lock.json ./
+RUN npm ci
 
 # Copy the rest of the application
 COPY . .
+
+# Build frontend assets with Vite
+RUN npm run build
 
 # Run post-install scripts now that all files are present
 RUN composer run-script post-autoload-dump
