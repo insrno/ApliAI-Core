@@ -27,9 +27,9 @@ class JobDescriptionController extends Controller
     {
         $validated = $request->validate([
             'user_id' => 'required|integer',
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:500',
             'company' => 'nullable|string|max:255',
-            'description' => 'required|string',
+            'description' => 'required|string|max:50000',
         ]);
 
         $jobDescription = JobDescription::create($validated);

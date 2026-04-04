@@ -19,10 +19,10 @@ class AIService
         $prompt = $this->buildPrompt($resumeText, $jobDescription);
 
         return match ($provider) {
-            'gemini' => $this->callGemini($prompt),
-            'openai' => $this->callOpenAI($prompt),
-            'groq' => $this->callGroq($prompt),
-            default => $this->callGroq($prompt),
+            'gemini' => $this->callGemini($prompt, 'evaluation'),
+            'openai' => $this->callOpenAI($prompt, 'evaluation'),
+            'groq' => $this->callGroq($prompt, 'evaluation'),
+            default => $this->callGroq($prompt, 'evaluation'),
         };
     }
 
@@ -35,16 +35,16 @@ class AIService
         $prompt = $this->buildTipsPrompt($resumeText);
 
         return match ($provider) {
-            'gemini' => $this->callGemini($prompt),
-            'openai' => $this->callOpenAI($prompt),
-            'groq' => $this->callGroq($prompt),
-            default => $this->callGroq($prompt),
+            'gemini' => $this->callGemini($prompt, 'tips'),
+            'openai' => $this->callOpenAI($prompt, 'tips'),
+            'groq' => $this->callGroq($prompt, 'tips'),
+            default => $this->callGroq($prompt, 'tips'),
         };
     }
 
     // ==================== PROVIDERS ====================
 
-    private function callGroq(string $prompt): array
+    private function callGroq(string $prompt, string $task): array
     {
         $apiKey = config('services.groq.api_key');
 
@@ -67,10 +67,10 @@ class AIService
                 'response_format' => ['type' => 'json_object'],
             ]);
 
-        return $this->parseResponse($response, 'Groq');
+        return $this->parseResponse($response, 'Groq', $task);
     }
 
-    private function callGemini(string $prompt): array
+    private function callGemini(string $prompt, string $task): array
     {
         $apiKey = config('services.gemini.api_key');
 
@@ -95,15 +95,15 @@ class AIService
             throw new \Exception('Gemini returned empty response');
         }
 
-        $result = json_decode($text, true);
-        if (!$result || !isset($result['score'])) {
+        $result = $this->decodeJsonFromText($text);
+        if (!$this->isExpectedResult($result, $task)) {
             throw new \Exception('Could not parse Gemini response');
         }
 
         return $result;
     }
 
-    private function callOpenAI(string $prompt): array
+    private function callOpenAI(string $prompt, string $task): array
     {
         $apiKey = config('services.openai.api_key');
 
@@ -126,12 +126,12 @@ class AIService
                 'response_format' => ['type' => 'json_object'],
             ]);
 
-        return $this->parseResponse($response, 'OpenAI');
+        return $this->parseResponse($response, 'OpenAI', $task);
     }
 
     // ==================== HELPERS ====================
 
-    private function parseResponse($response, string $provider): array
+    private function parseResponse($response, string $provider, string $task): array
     {
         if ($response->failed()) {
             Log::error("{$provider} API error", [
@@ -150,13 +150,66 @@ class AIService
             throw new \Exception("{$provider} returned empty response");
         }
 
-        $result = json_decode($text, true);
-        if (!$result || !isset($result['score'])) {
+        $result = $this->decodeJsonFromText($text);
+        if (!$this->isExpectedResult($result, $task)) {
             Log::error("{$provider} parse error", ['raw' => $text]);
             throw new \Exception("Could not parse {$provider} response");
         }
 
         return $result;
+    }
+
+    private function decodeJsonFromText(?string $text): ?array
+    {
+        if (!$text) {
+            return null;
+        }
+
+        $trimmed = trim($text);
+
+        // 1. Try direct decode
+        $decoded = json_decode($trimmed, true);
+        if (is_array($decoded)) {
+            return $decoded;
+        }
+
+        // 2. Strip ```json ... ``` code fences
+        $withoutFence = preg_replace('/^```(?:json)?\s*\n?|\n?\s*```$/is', '', $trimmed);
+        $decoded = json_decode(trim((string) $withoutFence), true);
+        if (is_array($decoded)) {
+            return $decoded;
+        }
+
+        // 3. Extract first JSON object from surrounding text
+        if (preg_match('/\{.*\}/s', $trimmed, $matches)) {
+            $decoded = json_decode($matches[0], true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+
+        // 4. Extract first JSON array from surrounding text
+        if (preg_match('/\[.*\]/s', $trimmed, $matches)) {
+            $decoded = json_decode($matches[0], true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+
+        Log::warning('Failed to decode JSON from AI response', ['text' => substr($trimmed, 0, 500)]);
+        return null;
+    }
+
+    private function isExpectedResult(?array $result, string $task): bool
+    {
+        if (!is_array($result)) {
+            return false;
+        }
+
+        return match ($task) {
+            'tips' => isset($result['tips']) && is_array($result['tips']),
+            default => isset($result['score']),
+        };
     }
 
     private function buildPrompt(string $resumeText, string $jobDescription): string

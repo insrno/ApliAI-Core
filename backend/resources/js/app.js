@@ -1,5 +1,13 @@
 import './bootstrap';
 
+// ===== GLOBAL ERROR HANDLER =====
+window.addEventListener('error', (e) => {
+    console.error('Uncaught error:', e.error);
+});
+window.addEventListener('unhandledrejection', (e) => {
+    console.error('Unhandled promise rejection:', e.reason);
+});
+
 // ===== SECURITY: HTML escaping to prevent XSS =====
 function esc(str) {
     const div = document.createElement('div');
@@ -35,6 +43,7 @@ const atsMatchRate = document.getElementById('ats-match-rate');
 const atsProgress = document.getElementById('ats-progress');
 const generateTipsBtn = document.getElementById('generate-tips-btn');
 const tipsList = document.getElementById('tips-list');
+const tipsPlaceholder = document.getElementById('tips-placeholder');
 const toast = document.getElementById('toast');
 const jobTemplates = document.getElementById('job-templates');
 const exportBtn = document.getElementById('export-btn');
@@ -45,6 +54,8 @@ const historyList = document.getElementById('history-list');
 
 let currentResumeId = null;
 let currentProvider = 'groq';
+let lastUploadedFileKey = null;
+let lastUploadedResumeId = null;
 
 let selectedFile = null;
 
@@ -82,6 +93,8 @@ resumeInput.addEventListener('change', (e) => {
 
 function handleFile(file) {
     selectedFile = file;
+    lastUploadedFileKey = null;
+    lastUploadedResumeId = null;
     dropZone.classList.add('has-file');
     dropZoneContent.innerHTML = `
         <svg class="w-8 h-8 mx-auto mb-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -101,6 +114,14 @@ function checkReady() {
     evaluateBtn.disabled = !(selectedFile && jobTitle.value.trim() && jobDescription.value.trim());
 }
 
+// ===== CTRL+ENTER SHORTCUT =====
+document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && !evaluateBtn.disabled) {
+        e.preventDefault();
+        evaluateBtn.click();
+    }
+});
+
 // ===== EVALUATE =====
 evaluateBtn.addEventListener('click', async () => {
     if (evaluateBtn.disabled) return;
@@ -112,18 +133,28 @@ evaluateBtn.addEventListener('click', async () => {
     loadingSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     try {
-        // 1. Upload resume
-        const form = new FormData();
-        form.append('resume', selectedFile);
-        form.append('user_id', '1');
+        // 1. Upload resume (skip if same file already uploaded)
+        const fileKey = `${selectedFile.name}_${selectedFile.size}_${selectedFile.lastModified}`;
+        let resumeId;
 
-        const r1 = await fetch('/api/resumes', {
-            method: 'POST',
-            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
-            body: form,
-        });
-        if (!r1.ok) throw new Error((await r1.json()).message || 'Resume upload failed');
-        const d1 = await r1.json();
+        if (lastUploadedFileKey === fileKey && lastUploadedResumeId) {
+            resumeId = lastUploadedResumeId;
+        } else {
+            const form = new FormData();
+            form.append('resume', selectedFile);
+            form.append('user_id', '1');
+
+            const r1 = await fetch('/api/resumes', {
+                method: 'POST',
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+                body: form,
+            });
+            if (!r1.ok) throw new Error((await r1.json()).message || 'Resume upload failed');
+            const d1 = await r1.json();
+            resumeId = d1.data.id;
+            lastUploadedFileKey = fileKey;
+            lastUploadedResumeId = resumeId;
+        }
 
         // 2. Save job description
         const r2 = await fetch('/api/job-descriptions', {
@@ -144,7 +175,7 @@ evaluateBtn.addEventListener('click', async () => {
             method: 'POST',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
             body: JSON.stringify({
-                resume_id: d1.data.id,
+                resume_id: resumeId,
                 job_description_id: d2.data.id,
                 provider: aiProvider.value,
             }),
@@ -153,15 +184,18 @@ evaluateBtn.addEventListener('click', async () => {
         const d3 = await r3.json();
         if (!r3.ok) throw new Error(d3.message || 'Evaluation failed');
 
-        currentResumeId = d1.data.id;
+        currentResumeId = resumeId;
         currentProvider = aiProvider.value;
 
-        // 4. Fetch ATS Keywords Match
+        // 4. Fetch ATS Keywords Match (with loading indicator)
+        atsKeywordsList.innerHTML = '<span class="text-xs text-gray-400 animate-pulse">Analyzing keywords...</span>';
+        atsMatchRate.textContent = '...';
+
         const r4 = await fetch('/api/keywords', {
             method: 'POST',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
             body: JSON.stringify({
-                resume_id: d1.data.id,
+                resume_id: resumeId,
                 job_description_id: d2.data.id,
             }),
         });
@@ -170,12 +204,12 @@ evaluateBtn.addEventListener('click', async () => {
 
         loadingSection.classList.add('hidden');
         showResults(d3.data, d4);
-        saveToHistory(d1.data.file_name, jobTitle.value || 'Untitled Job', d3.data.score);
+        saveToHistory(selectedFile.name, jobTitle.value || 'Untitled Job', d3.data.score);
+        showToast('Evaluation complete!', 'success');
 
     } catch (err) {
         loadingSection.classList.add('hidden');
         showToast(err.message);
-        console.error('Evaluation error:', err);
     } finally {
         evaluateBtnText.textContent = 'Evaluate with AI';
         checkReady();
@@ -246,10 +280,12 @@ function showResults(data, keywordsData) {
     // Reset Tips section
     tipsList.classList.add('hidden');
     tipsList.innerHTML = '';
+    tipsPlaceholder.classList.remove('hidden');
     generateTipsBtn.classList.remove('hidden');
+    generateTipsBtn.disabled = false;
     generateTipsBtn.innerHTML = `
-        <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0 3.09 3.09Z" /></svg>
-        Generate Improvement Tips
+        <svg class="w-3.5 h-3.5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0 3.09 3.09Z" /></svg>
+        Generate Tips
     `;
 }
 
@@ -257,7 +293,8 @@ function showResults(data, keywordsData) {
 generateTipsBtn.addEventListener('click', async () => {
     if (!currentResumeId) return;
 
-    generateTipsBtn.innerHTML = `<div class="w-5 h-5 rounded-full border-2 border-gray-200 border-t-gray-500 animate-spin"></div> Generating...`;
+    generateTipsBtn.disabled = true;
+    generateTipsBtn.innerHTML = `<div class="w-3.5 h-3.5 rounded-full border-2 border-gray-200 border-t-purple-500 animate-spin"></div> Generating...`;
     
     try {
         const res = await fetch('/api/tips', {
@@ -270,34 +307,44 @@ generateTipsBtn.addEventListener('click', async () => {
         if (!res.ok) throw new Error(data.message || 'Failed to generate tips');
 
         generateTipsBtn.classList.add('hidden');
+        tipsPlaceholder.classList.add('hidden');
         tipsList.classList.remove('hidden');
         tipsList.innerHTML = '';
 
         data.data.forEach((tip, idx) => {
-            const priorityColor = tip.priority === 'high' ? 'bg-red-100 text-red-700' : (tip.priority === 'medium' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-700');
+            const priorityColor = tip.priority === 'high' ? 'bg-red-50 text-red-700 border-red-100' : (tip.priority === 'medium' ? 'bg-amber-50 text-amber-700 border-amber-100' : 'bg-gray-50 text-gray-600 border-gray-100');
+            const priorityIcon = tip.priority === 'high' ? '🔴' : (tip.priority === 'medium' ? '🟡' : '⚪');
             
-            tipsList.innerHTML += `
-                <div class="bg-white border text-left border-gray-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="font-bold text-gray-900 text-sm">💡 ${esc(tip.title)}</span>
-                        <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${priorityColor}">${esc(tip.priority)}</span>
-                    </div>
-                    <p class="text-xs text-gray-600 leading-relaxed">${esc(tip.description)}</p>
+            const card = document.createElement('div');
+            card.className = 'bg-white border border-gray-100 p-4 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 animate-fade-in';
+            card.style.animationDelay = `${idx * 0.06}s`;
+            card.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <span class="font-semibold text-gray-900 text-sm leading-snug">${priorityIcon} ${esc(tip.title)}</span>
+                    <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${priorityColor} shrink-0 ml-2">${esc(tip.priority)}</span>
                 </div>
+                <p class="text-xs text-gray-500 leading-relaxed">${esc(tip.description)}</p>
             `;
+            tipsList.appendChild(card);
         });
     } catch (err) {
         showToast(err.message);
-        generateTipsBtn.innerHTML = 'Retry Generating Tips';
+        generateTipsBtn.disabled = false;
+        generateTipsBtn.innerHTML = `
+            <svg class="w-3.5 h-3.5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182" /></svg>
+            Retry
+        `;
     }
 });
 
 function animateNum(el, from, to, dur) {
     const start = performance.now();
-    if (!start) start = timestamp;
-    const p = Math.min((timestamp - start) / dur, 1);
-    el.innerHTML = Math.floor(from + p * (to - from));
-    if (p < 1) requestAnimationFrame((t) => animateNum(el, from, to, dur, start, t));
+    function step(timestamp) {
+        const p = Math.min((timestamp - start) / dur, 1);
+        el.innerHTML = Math.floor(from + p * (to - from));
+        if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
 }
 
 // ===== JOB TEMPLATES =====
@@ -397,6 +444,8 @@ historyModal.addEventListener('click', (e) => {
 // ===== RESET =====
 resetBtn.addEventListener('click', () => {
     selectedFile = null;
+    lastUploadedFileKey = null;
+    lastUploadedResumeId = null;
     resumeInput.value = '';
     jobTitle.value = '';
     jobCompany.value = '';
