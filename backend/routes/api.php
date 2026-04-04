@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\JobDescriptionController;
 use App\Http\Controllers\ResumeController;
 use Illuminate\Support\Facades\Route;
@@ -9,3 +10,6 @@ Route::post('/resumes', [ResumeController::class, 'store']);
 
 // Endpoint for uploading a new job description
 Route::post('/job-descriptions', [JobDescriptionController::class, 'store']);
+
+// Endpoint for AI-powered resume evaluation
+Route::post('/evaluate', [EvaluationController::class, 'evaluate']);

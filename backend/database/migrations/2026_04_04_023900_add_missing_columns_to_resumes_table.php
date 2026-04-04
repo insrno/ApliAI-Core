@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('resumes', function (Blueprint $table) {
             if (! Schema::hasColumn('resumes', 'user_id')) {
-                $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+                $table->unsignedBigInteger('user_id');
             }
 
             if (! Schema::hasColumn('resumes', 'file_name')) {

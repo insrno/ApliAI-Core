@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('job_descriptions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('title');
+            $table->string('company')->nullable();
+            $table->text('description');
             $table->timestamps();
         });
     }
