@@ -5,11 +5,15 @@ use App\Http\Controllers\JobDescriptionController;
 use App\Http\Controllers\ResumeController;
 use Illuminate\Support\Facades\Route;
 
-// Endpoint for uploading a new resume
-Route::post('/resumes', [ResumeController::class, 'store']);
+Route::middleware('throttle:30,1')->group(function () {
+    Route::post('/resumes', [ResumeController::class, 'store'])
+        ->middleware('throttle:10,1');
 
-// Endpoint for uploading a new job description
-Route::post('/job-descriptions', [JobDescriptionController::class, 'store']);
+    Route::post('/job-descriptions', [JobDescriptionController::class, 'store']);
 
-// Endpoint for AI-powered resume evaluation
-Route::post('/evaluate', [EvaluationController::class, 'evaluate']);
+    Route::post('/evaluate', [EvaluationController::class, 'evaluate'])
+        ->middleware('throttle:5,1');
+
+    // Get available AI providers
+    Route::get('/providers', [EvaluationController::class, 'providers']);
+});

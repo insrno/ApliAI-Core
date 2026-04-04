@@ -39,4 +39,16 @@ return [
         'api_key' => env('GEMINI_API_KEY'),
     ],
 
+    'groq' => [
+        'api_key' => env('GROQ_API_KEY'),
+    ],
+
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY'),
+    ],
+
+    'ai' => [
+        'default_provider' => env('DEFAULT_AI_PROVIDER', 'groq'),
+    ],
+
 ];

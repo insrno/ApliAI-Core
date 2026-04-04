@@ -20,29 +20,34 @@ class ResumeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'resume' => 'required|mimes:pdf|max:2048',
-            // 'user_id' => 'required|exists:users,id'
+            'resume' => 'required|file|mimes:pdf|max:5120', // PDF only, max 5MB
         ]);
 
         if ($request->hasFile('resume')) {
             $file = $request->file('resume');
-            
-            $fileName = time() . '_' . $file->getClientOriginalName();
+
+            // Sanitize filename: remove path info, replace unsafe chars
+            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeName = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $originalName);
+            $fileName = time() . '_' . substr($safeName, 0, 100) . '.pdf';
             $filePath = $file->storeAs('resumes', $fileName, 'public');
 
-            // --- NEW: PARSE THE PDF ---
-            // 1. Initialize the parser
-            $parser = new \Smalot\PdfParser\Parser();
-            
-            // 2. Point it to the exact file we just saved on the server
-            $pdf = $parser->parseFile(storage_path('app/public/' . $filePath));
-            
-            // 3. Extract the raw text
-            $extractedText = $pdf->getText();
-            // --------------------------
+            // Parse PDF with error handling
+            $extractedText = '';
+            try {
+                $parser = new \Smalot\PdfParser\Parser();
+                $pdf = $parser->parseFile(storage_path('app/public/' . $filePath));
+                $extractedText = $pdf->getText();
+
+                // Limit extracted text to prevent DB overflow
+                $extractedText = mb_substr($extractedText, 0, 50000);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::warning('PDF parsing failed', ['error' => $e->getMessage()]);
+                // Continue with empty text - user can still try evaluation
+            }
 
             $resume = \App\Models\Resume::create([
-                'user_id' => 1, 
+                'user_id' => 1,
                 'file_name' => $fileName,
                 'file_path' => $filePath,
                 'extracted_text' => $extractedText,
@@ -50,9 +55,8 @@ class ResumeController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Resume uploaded and parsed successfully!',
+                'message' => 'Resume uploaded successfully!',
                 'data' => $resume,
-                'extracted_text' => $extractedText // Let's output it to Thunder Client to prove it works!
             ], 201);
         }
 
