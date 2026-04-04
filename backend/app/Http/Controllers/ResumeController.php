@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Resume;
 use Illuminate\Http\Request;
 
 class ResumeController extends Controller
@@ -22,28 +21,41 @@ class ResumeController extends Controller
     {
         $request->validate([
             'resume' => 'required|mimes:pdf|max:2048',
-            'user_id' => 'required|exists:users,id',
+            // 'user_id' => 'required|exists:users,id'
         ]);
 
-        if (! $request->hasFile('resume')) {
-            return response()->json(['error' => 'No file was uploaded.'], 400);
+        if ($request->hasFile('resume')) {
+            $file = $request->file('resume');
+            
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('resumes', $fileName, 'public');
+
+            // --- NEW: PARSE THE PDF ---
+            // 1. Initialize the parser
+            $parser = new \Smalot\PdfParser\Parser();
+            
+            // 2. Point it to the exact file we just saved on the server
+            $pdf = $parser->parseFile(storage_path('app/public/' . $filePath));
+            
+            // 3. Extract the raw text
+            $extractedText = $pdf->getText();
+            // --------------------------
+
+            $resume = \App\Models\Resume::create([
+                'user_id' => 1, 
+                'file_name' => $fileName,
+                'file_path' => $filePath,
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Resume uploaded and parsed successfully!',
+                'data' => $resume,
+                'extracted_text' => $extractedText // Let's output it to Thunder Client to prove it works!
+            ], 201);
         }
 
-        $file = $request->file('resume');
-        $fileName = time().'_'.$file->getClientOriginalName();
-        $filePath = $file->storeAs('resumes', $fileName, 'public');
-
-        $resume = Resume::create([
-            'user_id' => (int) $request->input('user_id'),
-            'file_name' => $fileName,
-            'file_path' => $filePath,
-        ]);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Resume uploaded successfully!',
-            'data' => $resume,
-        ], 201);
+        return response()->json(['error' => 'No file was uploaded.'], 400);
     }
 
     /**
