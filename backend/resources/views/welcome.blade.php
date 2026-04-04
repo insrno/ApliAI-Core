@@ -27,6 +27,10 @@
             <div class="hidden sm:flex items-center gap-6 text-sm text-gray-500">
                 <a href="#how-it-works" class="hover:text-gray-900 transition-colors">How it works</a>
                 <a href="#evaluate" class="hover:text-gray-900 transition-colors">Evaluate</a>
+                <button id="history-nav-btn" class="hover:text-gray-900 transition-colors font-medium flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                    History
+                </button>
             </div>
         </div>
     </nav>
@@ -95,7 +99,38 @@
 
                 {{-- Job Description (3 cols) --}}
                 <div class="lg:col-span-3">
-                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Job Description</label>
+                    <div class="flex items-center justify-between mb-3">
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide">Job Description</label>
+                        <select id="job-templates" class="text-xs bg-white border border-gray-200 rounded px-2 py-1 text-gray-600 focus:outline-none focus:ring-1 focus:ring-gray-200">
+                            <option value="">Use a Template...</option>
+                            <optgroup label="Technology & IT">
+                                <option value="frontend">Frontend Developer (React/Vue)</option>
+                                <option value="backend">Backend Developer (Node/PHP)</option>
+                                <option value="data_analyst">Data Analyst</option>
+                                <option value="cloud_architect">Cloud Solutions Architect</option>
+                            </optgroup>
+                            <optgroup label="Business & Operations">
+                                <option value="project_manager">Project Manager</option>
+                                <option value="hr_manager">Human Resources Manager</option>
+                                <option value="business_analyst">Business Analyst</option>
+                            </optgroup>
+                            <optgroup label="Healthcare & Medical">
+                                <option value="registered_nurse">Registered Nurse</option>
+                                <option value="medical_assistant">Medical Assistant</option>
+                                <option value="healthcare_admin">Healthcare Administrator</option>
+                            </optgroup>
+                            <optgroup label="Marketing & Sales">
+                                <option value="marketing">Digital Marketing Specialist</option>
+                                <option value="sales_executive">Sales Executive</option>
+                                <option value="content_writer">Content Writer</option>
+                            </optgroup>
+                            <optgroup label="Engineering & Design">
+                                <option value="design">UI/UX Designer</option>
+                                <option value="mechanical_engineer">Mechanical Engineer</option>
+                                <option value="graphic_designer">Graphic Designer</option>
+                            </optgroup>
+                        </select>
+                    </div>
                     <div class="space-y-3">
                         <div class="grid sm:grid-cols-2 gap-3">
                             <input type="text" id="job-title" placeholder="Job Title"
@@ -183,13 +218,67 @@
                 </div>
             </div>
 
-            <div class="text-center pt-4 border-t border-gray-100">
+            {{-- ATS Keywords & Tips --}}
+            <div class="border-t border-gray-100 pt-10 mb-12">
+                <div class="grid md:grid-cols-2 gap-8">
+                    {{-- ATS Keywords --}}
+                    <div>
+                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75 21 21m-4.5-7.5a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" /></svg>
+                            ATS Keywords Match
+                        </h3>
+                        <p class="text-xs text-gray-400 mb-4">Top keywords from the job description</p>
+                        
+                        <div class="mb-4">
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="font-medium text-gray-600">Match Rate</span>
+                                <span id="ats-match-rate" class="font-bold text-gray-900">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-1.5">
+                                <div id="ats-progress" class="bg-indigo-500 h-1.5 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div id="ats-keywords-list" class="flex flex-wrap gap-2">
+                            {{-- Keywords will be generated here --}}
+                        </div>
+                    </div>
+
+                    {{-- AI Tips --}}
+                    <div>
+                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" /></svg>
+                            Actionable Tips
+                        </h3>
+                        <p class="text-xs text-gray-400 mb-4">How to improve this resume</p>
+                        
+                        <div id="tips-container">
+                            <button id="generate-tips-btn" class="w-full py-6 rounded-xl border border-dashed border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-colors text-sm font-medium text-gray-600 flex flex-col items-center justify-center gap-2">
+                                <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z" /></svg>
+                                Generate Improvement Tips
+                            </button>
+                            <div id="tips-list" class="space-y-3 hidden">
+                                {{-- Tips will be injected here --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center pt-4 border-t border-gray-100 flex items-center justify-center gap-4 no-print">
                 <button id="reset-btn"
                     class="text-sm text-gray-500 hover:text-gray-900 font-medium transition-colors inline-flex items-center gap-1.5">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182" />
                     </svg>
                     Evaluate another resume
+                </button>
+                <button id="export-btn"
+                    class="text-sm bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center gap-1.5">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                    Download Report
                 </button>
             </div>
         </div>
@@ -202,6 +291,23 @@
     <footer class="py-6 px-6 text-center">
         <p class="text-xs text-gray-300">ApliAI · Powered by AI</p>
     </footer>
+
+    {{-- History Modal --}}
+    <div id="history-modal" class="fixed inset-0 z-[100] bg-gray-900/50 backdrop-blur-sm hidden flex items-center justify-center">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-xl overflow-hidden max-h-[80vh] flex flex-col">
+            <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                <h3 class="font-bold text-gray-900">Recent Evaluations</h3>
+                <button id="close-history-btn" class="text-gray-400 hover:text-gray-900">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto bg-gray-50 flex-1">
+                <div id="history-list" class="space-y-4 text-center text-sm text-gray-500">
+                    No past evaluations found.
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

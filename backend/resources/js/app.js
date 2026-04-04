@@ -30,7 +30,21 @@ const strengthsList = document.getElementById('strengths-list');
 const weaknessesList = document.getElementById('weaknesses-list');
 const resetBtn = document.getElementById('reset-btn');
 const aiProvider = document.getElementById('ai-provider');
+const atsKeywordsList = document.getElementById('ats-keywords-list');
+const atsMatchRate = document.getElementById('ats-match-rate');
+const atsProgress = document.getElementById('ats-progress');
+const generateTipsBtn = document.getElementById('generate-tips-btn');
+const tipsList = document.getElementById('tips-list');
 const toast = document.getElementById('toast');
+const jobTemplates = document.getElementById('job-templates');
+const exportBtn = document.getElementById('export-btn');
+const historyNavBtn = document.getElementById('history-nav-btn');
+const historyModal = document.getElementById('history-modal');
+const closeHistoryBtn = document.getElementById('close-history-btn');
+const historyList = document.getElementById('history-list');
+
+let currentResumeId = null;
+let currentProvider = 'groq';
 
 let selectedFile = null;
 
@@ -139,8 +153,24 @@ evaluateBtn.addEventListener('click', async () => {
         const d3 = await r3.json();
         if (!r3.ok) throw new Error(d3.message || 'Evaluation failed');
 
+        currentResumeId = d1.data.id;
+        currentProvider = aiProvider.value;
+
+        // 4. Fetch ATS Keywords Match
+        const r4 = await fetch('/api/keywords', {
+            method: 'POST',
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+            body: JSON.stringify({
+                resume_id: d1.data.id,
+                job_description_id: d2.data.id,
+            }),
+        });
+
+        const d4 = r4.ok ? (await r4.json()).data : null;
+
         loadingSection.classList.add('hidden');
-        showResults(d3.data);
+        showResults(d3.data, d4);
+        saveToHistory(d1.data.file_name, jobTitle.value || 'Untitled Job', d3.data.score);
 
     } catch (err) {
         loadingSection.classList.add('hidden');
@@ -153,7 +183,7 @@ evaluateBtn.addEventListener('click', async () => {
 });
 
 // ===== RESULTS =====
-function showResults(data) {
+function showResults(data, keywordsData) {
     resultsSection.classList.remove('hidden');
     setTimeout(() => resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
 
@@ -186,23 +216,183 @@ function showResults(data) {
     });
 
     weaknessesList.innerHTML = '';
-    (data.weaknesses || []).forEach((w, i) => {
-        const el = document.createElement('div');
-        el.className = 'flex items-start gap-2 animate-fade-in';
-        el.style.animationDelay = `${i * 0.08}s`;
-        el.innerHTML = `<span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></span><span class="text-sm text-gray-600">${esc(w)}</span>`;
-        weaknessesList.appendChild(el);
+    (data.weaknesses || []).forEach(item => {
+        weaknessesList.innerHTML += `<div class="flex items-start gap-2.5">
+            <svg class="w-4 h-4 text-gray-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            <p class="text-sm text-gray-700 leading-relaxed">${esc(item)}</p>
+        </div>`;
     });
+
+    // Handle ATS Keywords
+    if (keywordsData) {
+        atsMatchRate.textContent = `${keywordsData.match_rate}%`;
+        atsProgress.style.width = `${keywordsData.match_rate}%`;
+        
+        if (keywordsData.match_rate >= 70) atsProgress.className = 'bg-green-500 h-1.5 rounded-full';
+        else if (keywordsData.match_rate >= 50) atsProgress.className = 'bg-amber-500 h-1.5 rounded-full';
+        else atsProgress.className = 'bg-red-500 h-1.5 rounded-full';
+
+        atsKeywordsList.innerHTML = '';
+        
+        keywordsData.matched.forEach(kw => {
+            atsKeywordsList.innerHTML += `<span class="px-2.5 py-1 bg-green-50 text-green-700 rounded text-xs font-medium border border-green-100 flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>${esc(kw)}</span>`;
+        });
+        
+        keywordsData.missing.forEach(kw => {
+            atsKeywordsList.innerHTML += `<span class="px-2.5 py-1 bg-red-50 text-red-700 rounded text-xs font-medium border border-red-100 flex items-center gap-1"><svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>${esc(kw)}</span>`;
+        });
+    }
+
+    // Reset Tips section
+    tipsList.classList.add('hidden');
+    tipsList.innerHTML = '';
+    generateTipsBtn.classList.remove('hidden');
+    generateTipsBtn.innerHTML = `
+        <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0 3.09 3.09Z" /></svg>
+        Generate Improvement Tips
+    `;
 }
+
+// ===== TIPS COMPONENT =====
+generateTipsBtn.addEventListener('click', async () => {
+    if (!currentResumeId) return;
+
+    generateTipsBtn.innerHTML = `<div class="w-5 h-5 rounded-full border-2 border-gray-200 border-t-gray-500 animate-spin"></div> Generating...`;
+    
+    try {
+        const res = await fetch('/api/tips', {
+            method: 'POST',
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+            body: JSON.stringify({ resume_id: currentResumeId, provider: currentProvider }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Failed to generate tips');
+
+        generateTipsBtn.classList.add('hidden');
+        tipsList.classList.remove('hidden');
+        tipsList.innerHTML = '';
+
+        data.data.forEach((tip, idx) => {
+            const priorityColor = tip.priority === 'high' ? 'bg-red-100 text-red-700' : (tip.priority === 'medium' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-700');
+            
+            tipsList.innerHTML += `
+                <div class="bg-white border text-left border-gray-200 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-bold text-gray-900 text-sm">💡 ${esc(tip.title)}</span>
+                        <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${priorityColor}">${esc(tip.priority)}</span>
+                    </div>
+                    <p class="text-xs text-gray-600 leading-relaxed">${esc(tip.description)}</p>
+                </div>
+            `;
+        });
+    } catch (err) {
+        showToast(err.message);
+        generateTipsBtn.innerHTML = 'Retry Generating Tips';
+    }
+});
 
 function animateNum(el, from, to, dur) {
     const start = performance.now();
-    (function tick(now) {
-        const p = Math.min((now - start) / dur, 1);
-        el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3)));
-        if (p < 1) requestAnimationFrame(tick);
-    })(start);
+    if (!start) start = timestamp;
+    const p = Math.min((timestamp - start) / dur, 1);
+    el.innerHTML = Math.floor(from + p * (to - from));
+    if (p < 1) requestAnimationFrame((t) => animateNum(el, from, to, dur, start, t));
 }
+
+// ===== JOB TEMPLATES =====
+const templates = {
+    // Technology
+    frontend: "We are looking for a Frontend Developer proficient in React, Vue, HTML, CSS, and modern JavaScript. You must understand responsive design, REST APIs, Git, and agile workflows. Experience with TypeScript and testing frameworks like Jest is a plus.",
+    backend: "Seeking a Backend Developer with strong PHP/Laravel, Node.js, or Java skills. Must have experience building secure RESTful APIs, managing PostgreSQL/MySQL databases, and working with Docker/AWS. Understanding of CI/CD and software architecture is required.",
+    data_analyst: "Looking for a Data Analyst to gather, analyze, and interpret complex data sets. Strong proficiency in SQL, Python/R, and Data Visualization tools (Tableau/Power BI) is required. You will work closely with stakeholders to provide actionable business insights.",
+    cloud_architect: "Seeking a Cloud Solutions Architect with deep expertise in AWS, Azure, or Google Cloud. You will design secure, scalable, and highly available cloud infrastructure. Proficiency in Infrastructure as Code (Terraform) and Kubernetes is essential.",
+    
+    // Business
+    project_manager: "We need an Agile Project Manager to lead cross-functional teams. You must have a PMP or Scrum Master certification, excellent communication skills, and expertise with Jira/Asana. Managing timelines, budgets, and stakeholder expectations is key.",
+    hr_manager: "Seeking an HR Manager to handle recruitment, employee relations, and performance management. Must have strong knowledge of labor laws, experience with HRIS systems, and a track record of building positive company culture.",
+    business_analyst: "Looking for a Business Analyst to bridge the gap between IT and the business. You will gather requirements, create process flowcharts, and write technical specifications. Experience with Agile methodology and tools like Visio is required.",
+    
+    // Healthcare
+    registered_nurse: "Currently hiring a Registered Nurse (RN) for our intensive care unit. Must hold a valid multi-state nursing license, BLS/ACLS certification, and possess strong clinical judgment. Ability to work in a fast-paced environment and provide compassionate patient care is mandatory.",
+    medical_assistant: "Seeking a Certified Medical Assistant to perform clinical and administrative duties. Responsibilities include taking vitals, assisting with procedures, and managing electronic health records (EHR). Strong organizational and interpersonal skills are needed.",
+    healthcare_admin: "Healthcare Administrator needed to manage hospital operations. Requires a Master's degree in Healthcare Administration (MHA), experience with medical billing compliance, facility management, and budget oversight.",
+    
+    // Marketing
+    marketing: "Digital Marketing Specialist needed to run SEO, SEM, and social media campaigns. You should have strong analytical skills (Google Analytics), copywriting ability, and experience with ad platforms (Facebook Ads, Google Ads). Data-driven mindset is essential.",
+    sales_executive: "Driven Sales Executive required for B2B enterprise software sales. You must have a proven track record of meeting quotas, excellent negotiation skills, and proficiency using CRM software (Salesforce). Building and maintaining client relationships is critical.",
+    content_writer: "Looking for a creative Content Writer to produce engaging blog posts, website copy, and marketing materials. Must have flawless grammar, SEO writing skills, and the ability to adapt tone for different audiences.",
+    
+    // Engineering & Design
+    design: "UI/UX Designer required to create intuitive, beautiful interfaces. Proficient in Figma, wireframing, and prototyping. Must understand user research, design systems, and collaborate closely with engineering teams to bring products to life.",
+    mechanical_engineer: "Seeking a Mechanical Engineer to design and test mechanical systems. Proficiency in CAD software (SolidWorks/AutoCAD), understanding of thermodynamics and materials science, and ability to manage product lifecycle from concept to production is required.",
+    graphic_designer: "Looking for a Graphic Designer to create visual concepts for digital and print media. Must be an expert in Adobe Creative Suite (Photoshop, Illustrator, InDesign) with a strong portfolio demonstrating typography, layout, and color theory skills."
+};
+
+jobTemplates.addEventListener('change', (e) => {
+    const val = e.target.value;
+    if (templates[val]) {
+        jobDescription.value = templates[val];
+        jobTitle.value = jobTemplates.options[jobTemplates.selectedIndex].text;
+        checkReady();
+    }
+});
+
+// ===== EXPORT PDF =====
+exportBtn.addEventListener('click', () => {
+    window.print();
+});
+
+// ===== EVALUATION HISTORY =====
+function saveToHistory(resumeName, jobName, score) {
+    const history = JSON.parse(localStorage.getItem('apliai_history') || '[]');
+    history.unshift({
+        id: Date.now(),
+        date: new Date().toLocaleDateString(),
+        resume: resumeName,
+        job: jobName,
+        score: score
+    });
+    // Keep only last 10
+    if (history.length > 10) history.pop();
+    localStorage.setItem('apliai_history', JSON.stringify(history));
+}
+
+function renderHistory() {
+    const history = JSON.parse(localStorage.getItem('apliai_history') || '[]');
+    if (history.length === 0) {
+        historyList.innerHTML = 'No past evaluations found.';
+        return;
+    }
+    
+    historyList.innerHTML = history.map(item => `
+        <div class="bg-white p-4 rounded-xl border border-gray-100 flex items-center justify-between text-left shadow-sm">
+            <div>
+                <h4 class="font-bold text-gray-900 text-sm mb-1">${esc(item.job)}</h4>
+                <p class="text-xs text-gray-500 line-clamp-1">${esc(item.resume)}</p>
+                <p class="text-[10px] text-gray-400 mt-1">${item.date}</p>
+            </div>
+            <div class="shrink-0 w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg ${
+                item.score >= 70 ? 'bg-green-50 text-green-700' : (item.score >= 50 ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700')
+            }">
+                ${item.score}
+            </div>
+        </div>
+    `).join('');
+}
+
+historyNavBtn.addEventListener('click', () => {
+    renderHistory();
+    historyModal.classList.remove('hidden');
+});
+
+closeHistoryBtn.addEventListener('click', () => {
+    historyModal.classList.add('hidden');
+});
+
+historyModal.addEventListener('click', (e) => {
+    if (e.target === historyModal) historyModal.classList.add('hidden');
+});
 
 // ===== RESET =====
 resetBtn.addEventListener('click', () => {
