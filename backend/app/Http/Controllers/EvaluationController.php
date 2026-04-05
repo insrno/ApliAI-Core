@@ -20,10 +20,10 @@ class EvaluationController extends Controller
             'provider' => 'nullable|string|in:gemini,openai,groq',
         ]);
 
-        if (($validated['provider'] ?? null) === 'gemini') {
+        if (in_array(($validated['provider'] ?? null), ['gemini', 'openai'], true)) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Google Gemini is temporarily locked. Please use Groq or OpenAI.',
+                'message' => 'Google Gemini and OpenAI are temporarily locked. Please use Groq.',
             ], 423);
         }
 
@@ -76,7 +76,7 @@ class EvaluationController extends Controller
             'providers' => [
                 ['id' => 'groq', 'name' => 'Groq (Llama 3.3)', 'available' => !empty(config('services.groq.api_key'))],
                 ['id' => 'gemini', 'name' => 'Google Gemini', 'available' => false],
-                ['id' => 'openai', 'name' => 'OpenAI (GPT-4o)', 'available' => !empty(config('services.openai.api_key'))],
+                ['id' => 'openai', 'name' => 'OpenAI (GPT-4o)', 'available' => false],
             ],
             'default' => config('services.ai.default_provider', 'groq'),
         ]);

@@ -17,10 +17,10 @@ class TipsController extends Controller
             'provider' => 'nullable|string|in:gemini,openai,groq',
         ]);
 
-        if (($validated['provider'] ?? null) === 'gemini') {
+        if (in_array(($validated['provider'] ?? null), ['gemini', 'openai'], true)) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Google Gemini is temporarily locked. Please use Groq or OpenAI.',
+                'message' => 'Google Gemini and OpenAI are temporarily locked. Please use Groq.',
             ], 423);
         }
 

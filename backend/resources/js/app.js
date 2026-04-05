@@ -58,11 +58,12 @@ let lastUploadedFileKey = null;
 let lastUploadedResumeId = null;
 
 let selectedFile = null;
+let isGeneratingTips = false;
 
 function normalizeProvider(provider) {
-    // Gemini is intentionally locked for now.
-    if (provider === 'gemini') {
-        showToast('Google Gemini is temporarily locked. Switched to Groq.', 'success');
+    // Gemini and OpenAI are intentionally locked for now.
+    if (provider === 'gemini' || provider === 'openai') {
+        showToast('Selected model is temporarily locked. Switched to Groq.', 'success');
         return 'groq';
     }
     return provider;
@@ -300,17 +301,32 @@ function showResults(data, keywordsData) {
 
 // ===== TIPS COMPONENT =====
 generateTipsBtn.addEventListener('click', async () => {
-    if (!currentResumeId) return;
+    if (!currentResumeId || isGeneratingTips) return;
+
+    isGeneratingTips = true;
 
     const defaultBtnContent = `
         <svg class="w-3.5 h-3.5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z" /></svg>
         Generate Tips
     `;
 
+    const regenerateBtnContent = `
+        <svg class="w-3.5 h-3.5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182" /></svg>
+        Re-generate Tips
+    `;
+
     generateTipsBtn.disabled = true;
     generateTipsBtn.innerHTML = `<div class="w-3.5 h-3.5 rounded-full border-2 border-gray-200 border-t-purple-500 animate-spin"></div> Generating...`;
     
     let completed = false;
+    const uiFallbackTimeout = setTimeout(() => {
+        if (!completed) {
+            isGeneratingTips = false;
+            generateTipsBtn.disabled = false;
+            generateTipsBtn.innerHTML = defaultBtnContent;
+            showToast('Generating tips took too long. Please try again.');
+        }
+    }, 30000);
 
     try {
         const controller = new AbortController();
@@ -340,21 +356,19 @@ generateTipsBtn.addEventListener('click', async () => {
             return (a?.title || '').localeCompare(b?.title || '');
         });
 
-        generateTipsBtn.classList.add('hidden');
         tipsPlaceholder.classList.add('hidden');
         tipsList.classList.remove('hidden');
         tipsList.innerHTML = '';
 
         sortedTips.forEach((tip, idx) => {
             const priorityColor = tip.priority === 'high' ? 'bg-red-50 text-red-700 border-red-100' : (tip.priority === 'medium' ? 'bg-amber-50 text-amber-700 border-amber-100' : 'bg-gray-50 text-gray-600 border-gray-100');
-            const priorityIcon = tip.priority === 'high' ? '🔴' : (tip.priority === 'medium' ? '🟡' : '⚪');
             
             const card = document.createElement('div');
             card.className = 'bg-white border border-gray-100 p-4 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 animate-fade-in';
             card.style.animationDelay = `${idx * 0.06}s`;
             card.innerHTML = `
                 <div class="flex justify-between items-start mb-2">
-                    <span class="font-semibold text-gray-900 text-sm leading-snug">${priorityIcon} ${esc(tip.title)}</span>
+                    <span class="font-semibold text-gray-900 text-sm leading-snug">${esc(tip.title)}</span>
                     <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${priorityColor} shrink-0 ml-2">${esc(tip.priority)}</span>
                 </div>
                 <p class="text-xs text-gray-500 leading-relaxed">${esc(tip.description)}</p>
@@ -362,6 +376,8 @@ generateTipsBtn.addEventListener('click', async () => {
             tipsList.appendChild(card);
         });
 
+        generateTipsBtn.disabled = false;
+        generateTipsBtn.innerHTML = regenerateBtnContent;
         completed = true;
     } catch (err) {
         if (err.name === 'AbortError') {
@@ -375,6 +391,8 @@ generateTipsBtn.addEventListener('click', async () => {
             Retry
         `;
     } finally {
+        clearTimeout(uiFallbackTimeout);
+        isGeneratingTips = false;
         if (!completed && !generateTipsBtn.classList.contains('hidden')) {
             // Ensure button never remains in an indefinite loading state.
             const isRetry = generateTipsBtn.textContent.includes('Retry');
@@ -441,9 +459,9 @@ exportBtn.addEventListener('click', () => {
 });
 
 aiProvider.addEventListener('change', () => {
-    if (aiProvider.value === 'gemini') {
+    if (aiProvider.value === 'gemini' || aiProvider.value === 'openai') {
         aiProvider.value = 'groq';
-        showToast('Google Gemini is temporarily locked.', 'error');
+        showToast('This model is temporarily locked.', 'error');
     }
 });
 
