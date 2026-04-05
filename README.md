@@ -4,8 +4,6 @@
 
 ApliAI is an AI-powered ATS simulator that evaluates resumes against job descriptions. It parses uploaded resume PDFs, performs semantic analysis through configurable AI providers, and returns match scores with actionable recommendations.
 
-*(You can drag and drop a screenshot of your website here!)*
-
 ---
 
 ## Features
