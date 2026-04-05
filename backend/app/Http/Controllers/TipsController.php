@@ -17,6 +17,13 @@ class TipsController extends Controller
             'provider' => 'nullable|string|in:gemini,openai,groq',
         ]);
 
+        if (($validated['provider'] ?? null) === 'gemini') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Google Gemini is temporarily locked. Please use Groq or OpenAI.',
+            ], 423);
+        }
+
         $resume = Resume::findOrFail($validated['resume_id']);
 
         if (empty($resume->extracted_text)) {

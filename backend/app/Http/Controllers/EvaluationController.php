@@ -20,6 +20,13 @@ class EvaluationController extends Controller
             'provider' => 'nullable|string|in:gemini,openai,groq',
         ]);
 
+        if (($validated['provider'] ?? null) === 'gemini') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Google Gemini is temporarily locked. Please use Groq or OpenAI.',
+            ], 423);
+        }
+
         $resume = Resume::findOrFail($validated['resume_id']);
         $jobDescription = JobDescription::findOrFail($validated['job_description_id']);
 
@@ -68,7 +75,7 @@ class EvaluationController extends Controller
         return response()->json([
             'providers' => [
                 ['id' => 'groq', 'name' => 'Groq (Llama 3.3)', 'available' => !empty(config('services.groq.api_key'))],
-                ['id' => 'gemini', 'name' => 'Google Gemini', 'available' => !empty(config('services.gemini.api_key'))],
+                ['id' => 'gemini', 'name' => 'Google Gemini', 'available' => false],
                 ['id' => 'openai', 'name' => 'OpenAI (GPT-4o)', 'available' => !empty(config('services.openai.api_key'))],
             ],
             'default' => config('services.ai.default_provider', 'groq'),

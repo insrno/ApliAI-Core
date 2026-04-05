@@ -59,6 +59,15 @@ let lastUploadedResumeId = null;
 
 let selectedFile = null;
 
+function normalizeProvider(provider) {
+    // Gemini is intentionally locked for now.
+    if (provider === 'gemini') {
+        showToast('Google Gemini is temporarily locked. Switched to Groq.', 'success');
+        return 'groq';
+    }
+    return provider;
+}
+
 // ===== TOAST =====
 function showToast(message, type = 'error') {
     toast.textContent = message;
@@ -177,7 +186,7 @@ evaluateBtn.addEventListener('click', async () => {
             body: JSON.stringify({
                 resume_id: resumeId,
                 job_description_id: d2.data.id,
-                provider: aiProvider.value,
+                provider: normalizeProvider(aiProvider.value),
             }),
         });
 
@@ -185,7 +194,7 @@ evaluateBtn.addEventListener('click', async () => {
         if (!r3.ok) throw new Error(d3.message || 'Evaluation failed');
 
         currentResumeId = resumeId;
-        currentProvider = aiProvider.value;
+        currentProvider = normalizeProvider(aiProvider.value);
 
         // 4. Fetch ATS Keywords Match (with loading indicator)
         atsKeywordsList.innerHTML = '<span class="text-xs text-gray-400 animate-pulse">Analyzing keywords...</span>';
@@ -293,25 +302,50 @@ function showResults(data, keywordsData) {
 generateTipsBtn.addEventListener('click', async () => {
     if (!currentResumeId) return;
 
+    const defaultBtnContent = `
+        <svg class="w-3.5 h-3.5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z" /></svg>
+        Generate Tips
+    `;
+
     generateTipsBtn.disabled = true;
     generateTipsBtn.innerHTML = `<div class="w-3.5 h-3.5 rounded-full border-2 border-gray-200 border-t-purple-500 animate-spin"></div> Generating...`;
     
+    let completed = false;
+
     try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 25000);
+
         const res = await fetch('/api/tips', {
             method: 'POST',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
             body: JSON.stringify({ resume_id: currentResumeId, provider: currentProvider }),
+            signal: controller.signal,
         });
+
+        clearTimeout(timeoutId);
 
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || 'Failed to generate tips');
+
+        if (!Array.isArray(data.data)) {
+            throw new Error('Tips response is invalid. Please try again.');
+        }
+
+        const priorityOrder = { high: 0, medium: 1, low: 2 };
+        const sortedTips = [...data.data].sort((a, b) => {
+            const ap = priorityOrder[a?.priority] ?? 99;
+            const bp = priorityOrder[b?.priority] ?? 99;
+            if (ap !== bp) return ap - bp;
+            return (a?.title || '').localeCompare(b?.title || '');
+        });
 
         generateTipsBtn.classList.add('hidden');
         tipsPlaceholder.classList.add('hidden');
         tipsList.classList.remove('hidden');
         tipsList.innerHTML = '';
 
-        data.data.forEach((tip, idx) => {
+        sortedTips.forEach((tip, idx) => {
             const priorityColor = tip.priority === 'high' ? 'bg-red-50 text-red-700 border-red-100' : (tip.priority === 'medium' ? 'bg-amber-50 text-amber-700 border-amber-100' : 'bg-gray-50 text-gray-600 border-gray-100');
             const priorityIcon = tip.priority === 'high' ? '🔴' : (tip.priority === 'medium' ? '🟡' : '⚪');
             
@@ -327,13 +361,28 @@ generateTipsBtn.addEventListener('click', async () => {
             `;
             tipsList.appendChild(card);
         });
+
+        completed = true;
     } catch (err) {
-        showToast(err.message);
+        if (err.name === 'AbortError') {
+            showToast('Generating tips took too long. Please try again.');
+        } else {
+            showToast(err.message);
+        }
         generateTipsBtn.disabled = false;
         generateTipsBtn.innerHTML = `
             <svg class="w-3.5 h-3.5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182" /></svg>
             Retry
         `;
+    } finally {
+        if (!completed && !generateTipsBtn.classList.contains('hidden')) {
+            // Ensure button never remains in an indefinite loading state.
+            const isRetry = generateTipsBtn.textContent.includes('Retry');
+            if (!isRetry) {
+                generateTipsBtn.disabled = false;
+                generateTipsBtn.innerHTML = defaultBtnContent;
+            }
+        }
     }
 });
 
@@ -387,7 +436,15 @@ jobTemplates.addEventListener('change', (e) => {
 
 // ===== EXPORT PDF =====
 exportBtn.addEventListener('click', () => {
+    // Let CSS print styles control a clean PDF-like layout.
     window.print();
+});
+
+aiProvider.addEventListener('change', () => {
+    if (aiProvider.value === 'gemini') {
+        aiProvider.value = 'groq';
+        showToast('Google Gemini is temporarily locked.', 'error');
+    }
 });
 
 // ===== EVALUATION HISTORY =====
