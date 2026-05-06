@@ -36,13 +36,15 @@ class ResumeController extends Controller
             $extractedText = '';
             try {
                 $parser = new \Smalot\PdfParser\Parser();
-                $pdf = $parser->parseFile(storage_path('app/public/' . $filePath));
+                // Get the full path for the stored file on the 'public' disk
+                $fullPath = \Illuminate\Support\Facades\Storage::disk('public')->path($filePath);
+                $pdf = $parser->parseFile($fullPath);
                 $extractedText = $pdf->getText();
 
                 // Limit extracted text to prevent DB overflow
                 $extractedText = mb_substr($extractedText, 0, 50000);
             } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::warning('PDF parsing failed', ['error' => $e->getMessage()]);
+                \Illuminate\Support\Facades\Log::warning('PDF parsing failed', ['error' => $e->getMessage(), 'file' => $filePath]);
                 // Continue with empty text - user can still try evaluation
             }
 
@@ -57,6 +59,7 @@ class ResumeController extends Controller
                 'status' => 'success',
                 'message' => 'Resume uploaded successfully!',
                 'data' => $resume,
+                'warning' => empty($extractedText) ? 'Could not extract text from PDF. Evaluation may not work properly.' : null,
             ], 201);
         }
 
