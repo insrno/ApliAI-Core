@@ -146,10 +146,13 @@ evaluateBtn.addEventListener('click', async () => {
         // 1. Upload resume (skip if same file already uploaded)
         const fileKey = `${selectedFile.name}_${selectedFile.size}_${selectedFile.lastModified}`;
         let resumeId;
+        console.log('[EVALUATE] Starting evaluation with file key:', fileKey);
 
         if (lastUploadedFileKey === fileKey && lastUploadedResumeId) {
+            console.log('[EVALUATE] Using cached resume ID:', lastUploadedResumeId);
             resumeId = lastUploadedResumeId;
         } else {
+            console.log('[EVALUATE] Uploading new resume...');
             const form = new FormData();
             form.append('resume', selectedFile);
             form.append('user_id', '1');
@@ -159,14 +162,22 @@ evaluateBtn.addEventListener('click', async () => {
                 headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
                 body: form,
             });
-            if (!r1.ok) throw new Error((await r1.json()).message || 'Resume upload failed');
             const d1 = await r1.json();
+            console.log('[EVALUATE] Resume upload response:', { status: r1.status, ok: r1.ok, data: d1 });
+            if (!r1.ok) throw new Error(d1.message || 'Resume upload failed');
+            if (!d1.data || !d1.data.id) throw new Error('Invalid resume response from server');
+            if (d1.warning) {
+                console.warn('[EVALUATE] Upload warning:', d1.warning);
+                showToast(d1.warning);
+            }
             resumeId = d1.data.id;
+            console.log('[EVALUATE] Resume saved with ID:', resumeId);
             lastUploadedFileKey = fileKey;
             lastUploadedResumeId = resumeId;
         }
 
         // 2. Save job description
+        console.log('[EVALUATE] Saving job description...');
         const r2 = await fetch('/api/job-descriptions', {
             method: 'POST',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
@@ -177,10 +188,13 @@ evaluateBtn.addEventListener('click', async () => {
                 description: jobDescription.value.trim(),
             }),
         });
-        if (!r2.ok) throw new Error((await r2.json()).message || 'Failed to save job description');
         const d2 = await r2.json();
+        console.log('[EVALUATE] Job description response:', { status: r2.status, ok: r2.ok, data: d2 });
+        if (!r2.ok) throw new Error(d2.message || 'Failed to save job description');
+        if (!d2.data || !d2.data.id) throw new Error('Invalid job description response from server');
 
         // 3. Evaluate
+        console.log('[EVALUATE] Sending evaluation request...');
         const r3 = await fetch('/api/evaluate', {
             method: 'POST',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken },
@@ -192,6 +206,7 @@ evaluateBtn.addEventListener('click', async () => {
         });
 
         const d3 = await r3.json();
+        console.log('[EVALUATE] Evaluation response:', { status: r3.status, ok: r3.ok, data: d3 });
         if (!r3.ok) throw new Error(d3.message || 'Evaluation failed');
 
         currentResumeId = resumeId;
@@ -216,8 +231,10 @@ evaluateBtn.addEventListener('click', async () => {
         showResults(d3.data, d4);
         saveToHistory(selectedFile.name, jobTitle.value || 'Untitled Job', d3.data.score);
         showToast('Evaluation complete!', 'success');
+        console.log('[EVALUATE] SUCCESS - Evaluation completed');
 
     } catch (err) {
+        console.error('[EVALUATE] ERROR:', err);
         loadingSection.classList.add('hidden');
         showToast(err.message);
     } finally {
