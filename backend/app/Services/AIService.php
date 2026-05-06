@@ -166,21 +166,17 @@ class AIService
         }
 
         $trimmed = trim($text);
-
-        // 1. Try direct decode
         $decoded = json_decode($trimmed, true);
         if (is_array($decoded)) {
             return $decoded;
         }
 
-        // 2. Strip ```json ... ``` code fences
-        $withoutFence = preg_replace('/^```(?:json)?\s*\n?|\n?\s*```$/is', '', $trimmed);
+        $withoutFence = preg_replace('/^```(?:json)?\\s*|\\s*```$/i', '', $trimmed);
         $decoded = json_decode(trim((string) $withoutFence), true);
         if (is_array($decoded)) {
             return $decoded;
         }
 
-        // 3. Extract first JSON object from surrounding text
         if (preg_match('/\{.*\}/s', $trimmed, $matches)) {
             $decoded = json_decode($matches[0], true);
             if (is_array($decoded)) {
@@ -188,15 +184,6 @@ class AIService
             }
         }
 
-        // 4. Extract first JSON array from surrounding text
-        if (preg_match('/\[.*\]/s', $trimmed, $matches)) {
-            $decoded = json_decode($matches[0], true);
-            if (is_array($decoded)) {
-                return $decoded;
-            }
-        }
-
-        Log::warning('Failed to decode JSON from AI response', ['text' => substr($trimmed, 0, 500)]);
         return null;
     }
 

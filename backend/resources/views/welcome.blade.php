@@ -36,7 +36,7 @@
     </nav>
 
     {{-- Hero --}}
-    <section class="pt-24 pb-20 px-6">
+    <section id="hero" class="pt-24 pb-20 px-6">
         <div class="max-w-2xl mx-auto text-center">
             <p class="text-sm font-medium text-gray-400 mb-4 tracking-wide">AI-POWERED RESUME ANALYSIS</p>
             <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-gray-900 mb-5">
@@ -149,11 +149,12 @@
                     <label for="ai-provider" class="text-xs font-medium text-gray-500">AI Model:</label>
                     <select id="ai-provider" class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200">
                         <option value="groq">Groq (Llama 3.3)</option>
-                        <option value="gemini">Google Gemini</option>
-                        <option value="openai">OpenAI (GPT-4o)</option>
+                        <option value="gemini" disabled>Google Gemini (Locked)</option>
+                        <option value="openai" disabled>OpenAI (Locked)</option>
                     </select>
                 </div>
-                <button id="evaluate-btn" type="button" disabled
+                <p class="text-xs text-gray-400 w-full text-center -mt-1">Google Gemini and OpenAI are temporarily locked while tuning reliability.</p>
+                <button id="evaluate-btn" disabled
                     class="inline-flex items-center gap-2 px-8 py-3 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-all disabled:opacity-25 disabled:cursor-not-allowed disabled:hover:bg-gray-900">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z" />
@@ -220,6 +221,13 @@
 
             {{-- ATS Keywords --}}
             <div class="border-t border-gray-100 pt-8 mb-8">
+                <div class="mb-4 p-3 rounded-lg bg-indigo-50 border border-indigo-100">
+                    <p class="text-xs text-indigo-800 leading-relaxed">
+                        <span class="font-semibold">What is ATS?</span>
+                        ATS means <span class="font-semibold">Applicant Tracking System</span>. Recruiters use it to scan resumes for relevant job keywords before a person reviews them.
+                        Higher match rate means your resume language is closer to the job post.
+                    </p>
+                </div>
                 <div class="flex flex-col sm:flex-row sm:items-start gap-6">
                     <div class="shrink-0 sm:w-48">
                         <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 flex items-center gap-1.5">
